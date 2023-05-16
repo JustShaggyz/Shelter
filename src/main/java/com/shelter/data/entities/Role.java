@@ -1,4 +1,4 @@
-package com.shelter.data.entity;
+package com.shelter.data.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

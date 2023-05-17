@@ -32,12 +32,20 @@ public class AnimalServiceImplementations implements AnimalService {
                 .orElseThrow(() -> new NoSuchElementException("Animal not found"));
 
         animal.setAdopted(true);
+        animal.setAvailable(false);
         return animalRepository.save(animal);
     }
 
     @Override
     public List<Animal> getAnimalsOutForWalk() {
         return animalRepository.findByIsAvailableFalseAndIsAdoptedFalse();
+    }
+
+    @Override
+    public Animal getAnimalById(Long animalId) {
+        return animalRepository.findById(animalId)
+                .orElseThrow(() -> new NoSuchElementException("Animal not found"));
+
     }
 
 }

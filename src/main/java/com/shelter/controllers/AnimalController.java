@@ -1,12 +1,13 @@
 package com.shelter.controllers;
 
 import com.shelter.data.entities.Animal;
-import com.shelter.data.repositories.AnimalRepository;
+import com.shelter.data.entities.Walk;
 import com.shelter.dto.AnimalDTO;
+import com.shelter.dto.WalkDTO;
 import com.shelter.services.AnimalService;
+import com.shelter.services.WalkService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +18,8 @@ import java.util.List;
 @RequestMapping("/animals")
 public class AnimalController {
 
-    private final AnimalRepository animalRepository;
     private final AnimalService animalService;
-    private final ModelMapper modelMapper;
+    private final WalkService walkService;
 
     @GetMapping
     public ResponseEntity<List<Animal>> getAllAnimals() {
@@ -27,7 +27,7 @@ public class AnimalController {
         return ResponseEntity.ok(animals);
     }
 
-    @GetMapping("/out_for_walk")
+    @GetMapping("/onWalk")
     public ResponseEntity<List<Animal>> getAnimalsOutForWalk() {
         List<Animal> animals = animalService.getAnimalsOutForWalk();
         return ResponseEntity.ok(animals);
@@ -43,5 +43,11 @@ public class AnimalController {
     public ResponseEntity<?> markAsAdopted(@PathVariable Long animalId) {
         Animal adoptedAnimal = animalService.adopt(animalId);
         return ResponseEntity.ok(adoptedAnimal);
+    }
+
+    @PostMapping("/walk")
+    public ResponseEntity<Walk> takeAnimalForWalk(@RequestBody WalkDTO walkDTO) {
+        Walk walk = walkService.takeAnimalForWalk(walkDTO);
+        return ResponseEntity.ok(walk);
     }
 }

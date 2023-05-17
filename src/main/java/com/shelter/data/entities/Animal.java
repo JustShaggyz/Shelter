@@ -36,6 +36,6 @@ public class Animal extends BaseEntity{
 
     public Animal() {
         this.isAdopted = false;
-        this.isAvailable = false;
+        this.isAvailable = true;
     }
 }

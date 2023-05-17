@@ -14,4 +14,6 @@ public interface AnimalService {
     Animal adopt(Long animalId);
 
     List<Animal> getAnimalsOutForWalk();
+
+    Animal getAnimalById(Long animalId);
 }

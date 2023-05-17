@@ -42,7 +42,7 @@ public class WalkServiceImplementation implements WalkService {
 
     @Override
     public Walk returnFromWalk(Long walkId, String comment) {
-        Walk walk = walkRepository.findById(walkId)
+        Walk walk = walkRepository.findByIdAndIsFinishedFalse(walkId)
                 .orElseThrow(() -> new NoSuchElementException("Walk not found"));
         walk.setFinished(true);
         walkRepository.save(walk);

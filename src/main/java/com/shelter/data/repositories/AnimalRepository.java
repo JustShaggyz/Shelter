@@ -8,4 +8,6 @@ import java.util.List;
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
     List<Animal> findByIsAdoptedFalse();
     List<Animal> findByIsAvailableFalseAndIsAdoptedFalse();
+
+    List<Animal> findByIsAvailableTrue();
 }

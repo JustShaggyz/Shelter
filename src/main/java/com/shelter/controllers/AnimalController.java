@@ -27,6 +27,12 @@ public class AnimalController {
         return ResponseEntity.ok(animals);
     }
 
+    @GetMapping("/available")
+    public ResponseEntity<List<Animal>> getAvailableAnimals() {
+        List<Animal> availableAnimals = animalService.getAvailableAnimals();
+        return ResponseEntity.ok(availableAnimals);
+    }
+
     @GetMapping("/onWalk")
     public ResponseEntity<List<Animal>> getAnimalsOutForWalk() {
         List<Animal> animals = animalService.getAnimalsOutForWalk();
@@ -53,9 +59,10 @@ public class AnimalController {
     }
 
     @PutMapping("/walk/return/{walkId}")
-    public ResponseEntity<WalkDTO> returnFromWalk(@PathVariable Long walkId, @RequestBody String comment) {
-        Walk walk = walkService.returnFromWalk(walkId, comment);
-        WalkDTO walkDTO = new WalkDTO(walk.getUser().getId(), walk.getAnimal().getId(), walk.getDate());
-        return ResponseEntity.ok(walkDTO);
+    public ResponseEntity<Walk> returnFromWalk(@PathVariable Long walkId, @RequestBody String comment) {
+        Walk walk = walkService.returnFromWalk(walkId, comment);WalkDTO walkDTO = new WalkDTO(walk.getUser().getId(), walk.getAnimal().getId(), walk.getDate());
+        return ResponseEntity.ok(walk);
     }
+
+
 }

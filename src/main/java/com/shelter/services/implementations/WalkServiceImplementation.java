@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -37,5 +38,25 @@ public class WalkServiceImplementation implements WalkService {
 
         Walk walk = new Walk(user, animal, LocalDate.now(), false);
         return walkRepository.save(walk);
+    }
+
+    @Override
+    public Walk returnFromWalk(Long walkId, String comment) {
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(() -> new NoSuchElementException("Walk not found"));
+        walk.setFinished(true);
+        walkRepository.save(walk);
+
+        Animal animal = walk.getAnimal();
+        animal.setAvailable(true);
+        animalRepository.save(animal);
+
+        User user = walk.getUser();
+        List<String> comments = user.getComments();
+        comments.add(comment);
+        user.setComments(comments);
+        userRepository.save(user);
+
+        return walk;
     }
 }

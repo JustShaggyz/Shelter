@@ -48,6 +48,14 @@ public class AnimalController {
     @PostMapping("/walk")
     public ResponseEntity<Walk> takeAnimalForWalk(@RequestBody WalkDTO walkDTO) {
         Walk walk = walkService.takeAnimalForWalk(walkDTO);
+        WalkDTO responseWalkDTO = new WalkDTO(walk.getUser().getId(), walk.getAnimal().getId(), walk.getDate());
         return ResponseEntity.ok(walk);
+    }
+
+    @PutMapping("/walk/return/{walkId}")
+    public ResponseEntity<WalkDTO> returnFromWalk(@PathVariable Long walkId, @RequestBody String comment) {
+        Walk walk = walkService.returnFromWalk(walkId, comment);
+        WalkDTO walkDTO = new WalkDTO(walk.getUser().getId(), walk.getAnimal().getId(), walk.getDate());
+        return ResponseEntity.ok(walkDTO);
     }
 }

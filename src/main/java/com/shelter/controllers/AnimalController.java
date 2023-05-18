@@ -27,6 +27,12 @@ public class AnimalController {
         return ResponseEntity.ok(animals);
     }
 
+    @GetMapping("/{animalId}")
+    public ResponseEntity<Animal> getAnimal(@PathVariable Long animalId) {
+        Animal animal = animalService.getAnimalById(animalId);
+        return ResponseEntity.ok(animal);
+    }
+
     @GetMapping("/available")
     public ResponseEntity<List<Animal>> getAvailableAnimals() {
         List<Animal> availableAnimals = animalService.getAvailableAnimals();
@@ -46,7 +52,7 @@ public class AnimalController {
     }
 
     @PutMapping("/{animalId}/adopt")
-    public ResponseEntity<?> markAsAdopted(@PathVariable Long animalId) {
+    public ResponseEntity<Animal> markAsAdopted(@PathVariable Long animalId) {
         Animal adoptedAnimal = animalService.adopt(animalId);
         return ResponseEntity.ok(adoptedAnimal);
     }
@@ -54,13 +60,12 @@ public class AnimalController {
     @PostMapping("/walk")
     public ResponseEntity<Walk> takeAnimalForWalk(@RequestBody WalkDTO walkDTO) {
         Walk walk = walkService.takeAnimalForWalk(walkDTO);
-        WalkDTO responseWalkDTO = new WalkDTO(walk.getUser().getId(), walk.getAnimal().getId(), walk.getDate());
         return ResponseEntity.ok(walk);
     }
 
     @PutMapping("/walk/return/{walkId}")
     public ResponseEntity<Walk> returnFromWalk(@PathVariable Long walkId, @RequestBody String comment) {
-        Walk walk = walkService.returnFromWalk(walkId, comment);WalkDTO walkDTO = new WalkDTO(walk.getUser().getId(), walk.getAnimal().getId(), walk.getDate());
+        Walk walk = walkService.returnFromWalk(walkId, comment);
         return ResponseEntity.ok(walk);
     }
 

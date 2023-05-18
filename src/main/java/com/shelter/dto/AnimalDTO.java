@@ -21,13 +21,9 @@ public class AnimalDTO {
     @Size(min = 1, max = 30)
     private String type;
 
-    @NotBlank
-    @Size(min = 1, max = 30)
     private String breed;
 
-    @Min(0)
     private int age;
 
-    @NotBlank
     private String pictureUrl;
 }

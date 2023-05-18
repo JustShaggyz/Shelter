@@ -32,7 +32,7 @@ public class User extends BaseEntity {
 
 
     @ElementCollection
-    @CollectionTable(name = "entity_strings")
+    @CollectionTable(name = "comments")
     @Column(name = "comments")
     private List<String> comments;
 

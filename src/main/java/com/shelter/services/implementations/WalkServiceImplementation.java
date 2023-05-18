@@ -59,4 +59,11 @@ public class WalkServiceImplementation implements WalkService {
 
         return walk;
     }
+
+    @Override
+    public List<Walk> getOngoingWalks() {
+        List<Walk> walks = walkRepository.findByIsFinishedFalse()
+                .orElseThrow(() -> new NoSuchElementException("No ongoing walks!"));
+        return walks;
+    }
 }

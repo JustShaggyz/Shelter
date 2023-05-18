@@ -12,4 +12,6 @@ public interface WalkRepository extends JpaRepository<Walk, Long> {
     Optional<Walk> findByIdAndIsFinishedFalse(@Param("id") Long id);
 
     Optional<List<Walk>> findByUserIdAndDateAfter(Long userId, LocalDate threeMonthsAgo);
+
+    Optional<List<Walk>> findByIsFinishedFalse();
 }

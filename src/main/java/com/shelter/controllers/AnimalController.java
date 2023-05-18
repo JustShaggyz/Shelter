@@ -46,7 +46,7 @@ public class AnimalController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Animal> addAnimal(@Valid @RequestBody AnimalDTO animalDTO) {
+    public ResponseEntity<Animal> addAnimal(@Valid @ModelAttribute AnimalDTO animalDTO) {
         Animal savedAnimal = animalService.addAnimal(animalDTO);
         return ResponseEntity.ok(savedAnimal);
     }
@@ -67,6 +67,12 @@ public class AnimalController {
     public ResponseEntity<Walk> returnFromWalk(@PathVariable Long walkId, @RequestBody String comment) {
         Walk walk = walkService.returnFromWalk(walkId, comment);
         return ResponseEntity.ok(walk);
+    }
+
+    @GetMapping("walk/ongoing")
+    public ResponseEntity<List<Walk>> returnOngoingWalks() {
+        List<Walk> walks = walkService.getOngoingWalks();
+        return ResponseEntity.ok(walks);
     }
 
 

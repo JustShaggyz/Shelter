@@ -25,6 +25,9 @@ public class Animal extends BaseEntity{
     @Column(name = "age", nullable = false)
     private int age;
 
+    @Column(name = "description")
+    private String description;
+
     @Column
     private boolean isAdopted;
 

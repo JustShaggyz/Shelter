@@ -1,20 +1,23 @@
 package com.shelter.services;
 
-import com.shelter.data.entities.Animal;
 import com.shelter.dto.AnimalDTO;
+import com.shelter.dto.returnAnimalDTO;
+import com.shelter.dto.returnDetailedAnimalDTO;
 
 import java.util.List;
 
 public interface AnimalService {
 
-    List<Animal> getAllAnimals();
+    List<returnAnimalDTO> getAllAnimals();
 
-    Animal addAnimal(AnimalDTO animalDTO);
+    returnDetailedAnimalDTO addAnimal(AnimalDTO animalDTO);
 
-    Animal adopt(Long animalId);
+    returnDetailedAnimalDTO adopt(Long animalId);
 
-    List<Animal> getAnimalsOutForWalk();
+    List<returnAnimalDTO> getAnimalsOutForWalk();
 
-    Animal getAnimalById(Long animalId);
-    List<Animal> getAvailableAnimals();
+    returnDetailedAnimalDTO getAnimalById(Long animalId);
+    List<returnAnimalDTO> getAvailableAnimals();
+
+    void returnAnimalFromWalk(Long animalId);
 }

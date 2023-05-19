@@ -1,13 +1,17 @@
 package com.shelter.services;
 
-import com.shelter.data.entities.User;
-import com.shelter.data.entities.Walk;
 import com.shelter.dto.HistoryAndCommentsDTO;
+import com.shelter.dto.returnUserDTO;
+import com.shelter.dto.returnDetailedUserDTO;
+import com.shelter.dto.returnWalkDTO;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
-    List<Walk> getUserHistory(Long userId);
+    List<returnUserDTO> getAllUsers();
+
+    returnDetailedUserDTO getUserById(Long userId);
+
+    List<returnWalkDTO> getUserHistory(Long userId);
     HistoryAndCommentsDTO getUserHistoryAndComments(Long userId);
 }

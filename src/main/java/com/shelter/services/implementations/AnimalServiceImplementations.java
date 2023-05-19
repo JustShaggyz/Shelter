@@ -3,6 +3,8 @@ package com.shelter.services.implementations;
 import com.shelter.data.entities.Animal;
 import com.shelter.data.repositories.AnimalRepository;
 import com.shelter.dto.AnimalDTO;
+import com.shelter.dto.returnAnimalDTO;
+import com.shelter.dto.returnDetailedAnimalDTO;
 import com.shelter.services.AnimalService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,12 +24,8 @@ public class AnimalServiceImplementations implements AnimalService {
     private final AnimalRepository animalRepository;
     private final ModelMapper modelMapper;
 
-    /*public Animal addAnimal(AnimalDTO animalDTO) {
-        Animal animal = modelMapper.map(animalDTO, Animal.class);
-        return animalRepository.save(animal);
-    }*/
 
-    public Animal addAnimal(AnimalDTO animalDTO) {
+    public returnDetailedAnimalDTO addAnimal(AnimalDTO animalDTO) {
         Animal animal = modelMapper.map(animalDTO, Animal.class);
 
         // Process and save the picture
@@ -35,8 +33,8 @@ public class AnimalServiceImplementations implements AnimalService {
             String pictureUrl = savePicture(animalDTO.getPicture());
             animal.setPictureUrl(pictureUrl);
         }
+        return modelMapper.map(animalRepository.save(animal), returnDetailedAnimalDTO.class);
 
-        return animalRepository.save(animal);
     }
 
     private String savePicture(MultipartFile picture) {
@@ -63,34 +61,52 @@ public class AnimalServiceImplementations implements AnimalService {
         }
     }
 
-    public List<Animal> getAllAnimals() {
+    public List<returnAnimalDTO> getAllAnimals() {
 
-        return animalRepository.findByIsAdoptedFalse();
+        return animalRepository.findByIsAdoptedFalse()
+                .stream()
+                .map(animal -> modelMapper.map(animal, returnAnimalDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<Animal> getAvailableAnimals() {
-        return animalRepository.findByIsAvailableTrue();
+    public List<returnAnimalDTO> getAvailableAnimals() {
+        return animalRepository.findByIsAvailableTrue()
+                .stream()
+                .map(animal -> modelMapper.map(animal, returnAnimalDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public Animal adopt(Long animalId) {
+    @Override
+    public void returnAnimalFromWalk(Long animalId) {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new NoSuchElementException("Animal not found"));
+        animal.setAvailable(false);
+        animalRepository.save(animal);
+    }
+
+    public returnDetailedAnimalDTO adopt(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new NoSuchElementException("Animal not found"));
 
         animal.setAdopted(true);
         animal.setAvailable(false);
-        return animalRepository.save(animal);
+        return modelMapper.map(animalRepository.save(animal), returnDetailedAnimalDTO.class);
     }
 
     @Override
-    public List<Animal> getAnimalsOutForWalk() {
-        return animalRepository.findByIsAvailableFalseAndIsAdoptedFalse();
+    public List<returnAnimalDTO> getAnimalsOutForWalk() {
+        return animalRepository.findByIsAvailableFalseAndIsAdoptedFalse()
+                .stream()
+                .map(animal -> modelMapper.map(animal, returnAnimalDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Animal getAnimalById(Long animalId) {
-        return animalRepository.findById(animalId)
+    public returnDetailedAnimalDTO getAnimalById(Long animalId) {
+        Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new NoSuchElementException("Animal not found"));
 
+        return modelMapper.map(animal, returnDetailedAnimalDTO.class);
     }
 
 }

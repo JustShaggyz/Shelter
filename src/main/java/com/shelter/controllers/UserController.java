@@ -1,33 +1,38 @@
 package com.shelter.controllers;
 
-import com.shelter.data.entities.User;
-import com.shelter.data.entities.Walk;
 import com.shelter.dto.HistoryAndCommentsDTO;
+import com.shelter.dto.returnUserDTO;
+import com.shelter.dto.returnDetailedUserDTO;
+import com.shelter.dto.returnWalkDTO;
 import com.shelter.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<returnUserDTO>> getAllUsers() {
+        List<returnUserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<returnDetailedUserDTO> getUser(@PathVariable Long userId) {
+        returnDetailedUserDTO user = userService.getUserById(userId);
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/{userId}/history")
-    public ResponseEntity<List<Walk>> getHistory(@PathVariable Long userId) {
-        List<Walk> walkHistory = userService.getUserHistory(userId);
+    public ResponseEntity<List<returnWalkDTO>> getHistory(@PathVariable Long userId) {
+        List<returnWalkDTO> walkHistory = userService.getUserHistory(userId);
         return ResponseEntity.ok(walkHistory);
     }
 

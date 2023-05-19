@@ -2,14 +2,15 @@ package com.shelter.services;
 
 import com.shelter.data.entities.Walk;
 import com.shelter.dto.WalkDTO;
+import com.shelter.dto.returnWalkDTO;
 
 import java.util.List;
 
 public interface WalkService {
 
-    Walk takeAnimalForWalk(WalkDTO walkDTO);
+    returnWalkDTO takeAnimalForWalk(WalkDTO walkDTO);
 
-    Walk returnFromWalk(Long walkId, String comment);
+    returnWalkDTO returnFromWalk(Long walkId, String comment);
 
-    List<Walk> getOngoingWalks();
+    List<returnWalkDTO> getOngoingWalks();
 }

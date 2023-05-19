@@ -31,7 +31,7 @@ public class AnimalServiceImplementations implements AnimalService {
         Animal animal = modelMapper.map(animalDTO, Animal.class);
 
         // Process and save the picture
-        if (animalDTO.getPicture() != null) {
+        if (animalDTO.getPicture() != null && !animalDTO.getPicture().isEmpty()) {
             String pictureUrl = savePicture(animalDTO.getPicture());
             animal.setPictureUrl(pictureUrl);
         }

@@ -1,5 +1,6 @@
 package com.shelter.dto;
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -15,17 +16,21 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class AnimalDTO {
     @NotBlank
-    @Size(min = 1, max = 30)
+    @Size(max = 30)
     private String name;
 
     @NotBlank
-    @Size(min = 1, max = 30)
+    @Size(max = 30)
     private String type;
 
+    @Size(max = 30)
     private String breed;
 
+    @Min(value = 0)
+    @Max(value = 100)
     private int age;
 
+    @Size(max = 300)
     private String description;
 
     private MultipartFile picture;

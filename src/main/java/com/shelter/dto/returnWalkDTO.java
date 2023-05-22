@@ -12,9 +12,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class returnWalkDTO {
+    private Long id;
+
     private returnUserDTO user;
 
     private returnDetailedAnimalDTO animal;
 
     private LocalDate date;
+
+    private boolean isFinished;
 }

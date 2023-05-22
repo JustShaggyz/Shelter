@@ -22,5 +22,7 @@ public class returnDetailedAnimalDTO {
 
     private String description;
 
+    private String pictureUrl;
+
     private boolean isAvailable;
 }

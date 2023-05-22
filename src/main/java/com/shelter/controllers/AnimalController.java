@@ -67,7 +67,7 @@ public class AnimalController {
         return ResponseEntity.ok(walk);
     }
 
-    @GetMapping("walk/ongoing")
+    @GetMapping("/walk/ongoing")
     public ResponseEntity<List<returnWalkDTO>> returnOngoingWalks() {
         List<returnWalkDTO> walks = walkService.getOngoingWalks();
         return ResponseEntity.ok(walks);

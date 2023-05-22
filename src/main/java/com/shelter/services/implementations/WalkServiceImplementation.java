@@ -45,9 +45,11 @@ public class WalkServiceImplementation implements WalkService {
         Walk walk = new Walk(user, animal, LocalDate.now(), false);
         walkRepository.save(walk);
         returnWalkDTO returnWalk = new returnWalkDTO(
+                walk.getId(),
                 modelMapper.map(walk.getUser(), returnUserDTO.class),
                 modelMapper.map(walk.getAnimal(), returnDetailedAnimalDTO.class),
-                walk.getDate());
+                walk.getDate(),
+                walk.isFinished());
         return returnWalk;
 
 

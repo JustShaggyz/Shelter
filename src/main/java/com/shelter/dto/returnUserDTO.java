@@ -1,12 +1,9 @@
 package com.shelter.dto;
 
-import com.shelter.data.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,5 +18,4 @@ public class returnUserDTO {
 
     private String lastName;
 
-    private Set<Role> authorities;
 }

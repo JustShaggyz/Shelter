@@ -14,4 +14,6 @@ public interface UserService {
 
     List<returnWalkDTO> getUserHistory(Long userId);
     HistoryAndCommentsDTO getUserHistoryAndComments(Long userId);
+
+    public List<String> getUserComments(Long userId);
 }

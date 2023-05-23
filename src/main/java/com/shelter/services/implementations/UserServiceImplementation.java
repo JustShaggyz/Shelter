@@ -45,7 +45,20 @@ public class UserServiceImplementation implements UserService {
 
 
     public List<returnWalkDTO> getUserHistory(Long userId) {
+
         return getHistoryByUserIdAndDate(userId);
+    }
+
+    public List<String> getUserComments(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+        List<String> comments = user.getComments();
+
+        int totalComments = comments.size();
+        int startIndex = Math.max(totalComments - 5, 0); // Starting index to retrieve comments
+
+        List<String> lastFiveComments = comments.subList(startIndex, totalComments);
+        return lastFiveComments;
     }
 
     @Override

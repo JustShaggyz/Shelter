@@ -36,9 +36,15 @@ public class UserController {
         return ResponseEntity.ok(walkHistory);
     }
 
-    @GetMapping("/{userId}/historyAndComments")
+   /* @GetMapping("/{userId}/historyAndComments")
     public ResponseEntity<HistoryAndCommentsDTO> getHistoryAndComments(@PathVariable Long userId) {
         HistoryAndCommentsDTO dto = userService.getUserHistoryAndComments(userId);
         return ResponseEntity.ok(dto);
+    }*/
+
+    @GetMapping("/{userId}/comments")
+    public ResponseEntity<List<String>> getComments(@PathVariable Long userId) {
+        List<String> comments = userService.getUserComments(userId);
+        return ResponseEntity.ok(comments);
     }
 }

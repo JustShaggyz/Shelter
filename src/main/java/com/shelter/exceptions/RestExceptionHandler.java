@@ -24,6 +24,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4042);
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(WalkNotFoundException.class)
+    protected ResponseEntity<Object> handleWalkNotFoundException(WalkNotFoundException ex, HttpServletRequest request) {
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4043);
+        return buildResponseEntity(apiError);
+    }
+
 
 
     private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {

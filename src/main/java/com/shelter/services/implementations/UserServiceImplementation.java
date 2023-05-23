@@ -8,6 +8,7 @@ import com.shelter.dto.HistoryAndCommentsDTO;
 import com.shelter.dto.returnUserDTO;
 import com.shelter.dto.returnDetailedUserDTO;
 import com.shelter.dto.returnWalkDTO;
+import com.shelter.exceptions.UserNotFoundException;
 import com.shelter.services.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -39,7 +40,7 @@ public class UserServiceImplementation implements UserService {
     @Override
     public returnDetailedUserDTO getUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         return modelMapper.map(user, returnDetailedUserDTO.class);
     }
 
@@ -51,7 +52,7 @@ public class UserServiceImplementation implements UserService {
 
     public List<String> getUserComments(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         List<String> comments = user.getComments();
 
         int totalComments = comments.size();
@@ -67,7 +68,7 @@ public class UserServiceImplementation implements UserService {
         List<returnWalkDTO> walks = getHistoryByUserIdAndDate(userId);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         List<String> comments = user.getComments();
 
         HistoryAndCommentsDTO dto = new HistoryAndCommentsDTO(walks, comments);

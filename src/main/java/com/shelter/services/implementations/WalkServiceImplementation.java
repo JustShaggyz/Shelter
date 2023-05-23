@@ -7,6 +7,9 @@ import com.shelter.data.repositories.AnimalRepository;
 import com.shelter.data.repositories.UserRepository;
 import com.shelter.data.repositories.WalkRepository;
 import com.shelter.dto.*;
+import com.shelter.exceptions.AnimalNotFoundException;
+import com.shelter.exceptions.UserNotFoundException;
+import com.shelter.exceptions.WalkNotFoundException;
 import com.shelter.services.AnimalService;
 import com.shelter.services.UserService;
 import com.shelter.services.WalkService;
@@ -34,10 +37,10 @@ public class WalkServiceImplementation implements WalkService {
     @Override
     public returnWalkDTO takeAnimalForWalk(WalkDTO walkDTO) {
         User user = userRepository.findById(walkDTO.getUserId())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Animal animal = animalRepository.findById(walkDTO.getAnimalId())
-                .orElseThrow(() -> new NoSuchElementException("Animal not found"));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
 
         animal.setAvailable(false);
         animalRepository.save(animal);
@@ -58,7 +61,7 @@ public class WalkServiceImplementation implements WalkService {
     @Override
     public returnWalkDTO returnFromWalk(Long walkId, String comment) {
         Walk walk = walkRepository.findByIdAndIsFinishedFalse(walkId)
-                .orElseThrow(() -> new NoSuchElementException("Walk not found"));
+                .orElseThrow(() -> new WalkNotFoundException("Walk not found"));
         walk.setFinished(true);
         walkRepository.save(walk);
 
@@ -78,7 +81,7 @@ public class WalkServiceImplementation implements WalkService {
     @Override
     public List<returnWalkDTO> getOngoingWalks() {
         return walkRepository.findByIsFinishedFalse()
-                .orElseThrow(() -> new NoSuchElementException("No ongoing walks!"))
+                .orElseThrow(() -> new WalkNotFoundException("No ongoing walks!"))
                 .stream()
                 .map(walks -> modelMapper.map(walks, returnWalkDTO.class))
                 .collect(Collectors.toList());

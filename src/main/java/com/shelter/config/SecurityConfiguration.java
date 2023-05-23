@@ -40,7 +40,8 @@ public class SecurityConfiguration {
                 .hasAuthority(ADMIN.name())
                 .requestMatchers("/animals",
                         "/animals/available",
-                        "/users/{userId}/history")
+                        "/users/{userId}/history",
+                        "/users/profile")
                 .hasAnyAuthority(ADMIN.name(), USER.name())
                 .anyRequest()
                 .authenticated()

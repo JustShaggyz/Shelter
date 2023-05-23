@@ -5,6 +5,7 @@ import com.shelter.data.repositories.AnimalRepository;
 import com.shelter.dto.AnimalDTO;
 import com.shelter.dto.returnAnimalDTO;
 import com.shelter.dto.returnDetailedAnimalDTO;
+import com.shelter.exceptions.AnimalNotFoundException;
 import com.shelter.services.AnimalService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -79,14 +80,14 @@ public class AnimalServiceImplementations implements AnimalService {
     @Override
     public void returnAnimalFromWalk(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new NoSuchElementException("Animal not found"));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
         animal.setAvailable(false);
         animalRepository.save(animal);
     }
 
     public returnDetailedAnimalDTO adopt(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new NoSuchElementException("Animal not found"));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
 
         animal.setAdopted(true);
         animal.setAvailable(false);
@@ -104,7 +105,7 @@ public class AnimalServiceImplementations implements AnimalService {
     @Override
     public returnDetailedAnimalDTO getAnimalById(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new NoSuchElementException("Animal not found"));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
 
         return modelMapper.map(animal, returnDetailedAnimalDTO.class);
     }

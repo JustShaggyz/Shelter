@@ -1,5 +1,6 @@
 package com.shelter.dto;
 
+import com.shelter.data.entities.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,4 @@ public class returnUserDTO {
     private String firstName;
 
     private String lastName;
-
 }

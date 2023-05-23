@@ -7,12 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class returnDetailedUserDTO {
+public class returnCurrentUserDTO {
     private Long id;
 
     private String email;
@@ -23,8 +22,5 @@ public class returnDetailedUserDTO {
 
     private String phoneNumber;
 
-    private List<String> comments;
-
     private Role role;
-
 }

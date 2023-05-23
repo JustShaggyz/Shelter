@@ -1,0 +1,21 @@
+package com.shelter.config.auth;
+
+import com.shelter.data.entities.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+
+@Component
+public class AuthenticationFacade {
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            return (User) authentication.getPrincipal();
+        }
+
+        // Return null or throw an exception if no user is authenticated
+        return null;
+    }
+}
+

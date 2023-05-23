@@ -1,5 +1,6 @@
 package com.shelter.services.implementations;
 
+import com.shelter.data.entities.Role;
 import com.shelter.data.entities.User;
 import com.shelter.data.repositories.AnimalRepository;
 import com.shelter.data.repositories.UserRepository;
@@ -36,6 +37,15 @@ public class UserServiceImplementation implements UserService {
                 .map(user -> modelMapper.map(user, returnUserDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<returnUserDTO> getVolunteers() {
+        return userRepository.findUsersByRole(Role.USER)
+                .stream()
+                .map(user -> modelMapper.map(user, returnUserDTO.class))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public returnDetailedUserDTO getUserById(Long userId) {

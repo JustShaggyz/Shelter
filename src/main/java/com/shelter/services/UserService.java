@@ -10,6 +10,8 @@ import java.util.List;
 public interface UserService {
     List<returnUserDTO> getAllUsers();
 
+    List<returnUserDTO> getVolunteers();
+
     returnDetailedUserDTO getUserById(Long userId);
 
     List<returnWalkDTO> getUserHistory(Long userId);

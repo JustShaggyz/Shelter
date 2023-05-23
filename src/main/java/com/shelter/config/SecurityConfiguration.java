@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                         "/animals/walk/return/{walkId}",
                         "/animals/walk/ongoing",
                         "/users",
+                        "/users/volunteers",
                         "/users/{userId}",
                         "/users/{userId}/historyAndComments")
                 .hasAuthority(ADMIN.name())

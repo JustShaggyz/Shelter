@@ -26,6 +26,12 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/volunteers")
+    public ResponseEntity<List<returnUserDTO>> getVolunteers() {
+        List<returnUserDTO> users = userService.getVolunteers();
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<returnDetailedUserDTO> getUser(@PathVariable Long userId) {
         returnDetailedUserDTO user = userService.getUserById(userId);

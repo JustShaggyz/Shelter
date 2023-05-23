@@ -25,9 +25,9 @@ public class SecurityConfiguration {
         httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**")
+                .requestMatchers("/auth/**", "/animals", "/animals/{animalId}")
                 .permitAll()
-                .requestMatchers("/animals/{animalId}",
+                .requestMatchers(
                         "/animals/onWalk",
                         "/animals/add",
                         "/animals/{animalId}/adopt",
@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                         "/users/{userId}",
                         "/users/{userId}/historyAndComments")
                 .hasAuthority(ADMIN.name())
-                .requestMatchers("/animals",
+                .requestMatchers(
                         "/animals/available",
                         "/users/{userId}/history",
                         "/users/profile")

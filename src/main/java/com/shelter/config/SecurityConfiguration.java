@@ -7,8 +7,10 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static com.shelter.data.entities.Role.ADMIN;
 import static com.shelter.data.entities.Role.USER;
@@ -19,31 +21,33 @@ import static com.shelter.data.entities.Role.USER;
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final LogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/animals", "/animals/{animalId}")
-                .permitAll()
-                .requestMatchers(
-                        "/animals/onWalk",
-                        "/animals/add",
-                        "/animals/{animalId}/adopt",
-                        "/animals/walk",
-                        "/animals/walk/return/{walkId}",
-                        "/animals/walk/ongoing",
-                        "/users",
-                        "/users/volunteers",
-                        "/users/{userId}",
-                        "/users/{userId}/historyAndComments")
-                .hasAuthority(ADMIN.name())
-                .requestMatchers(
-                        "/animals/available",
-                        "/users/{userId}/history",
-                        "/users/profile")
-                .hasAnyAuthority(ADMIN.name(), USER.name())
+                .requestMatchers("/animals/available").hasAnyAuthority(ADMIN.name(), USER.name())
+                .requestMatchers("/users/history").hasAnyAuthority(ADMIN.name(), USER.name())
+                .requestMatchers("/users/profile").hasAnyAuthority(ADMIN.name(), USER.name())
+
+                .requestMatchers("/animals/onWalk").hasAuthority(ADMIN.name())
+                .requestMatchers("/animals/add").hasAuthority(ADMIN.name())
+                .requestMatchers("/animals/{animalId}/adopt").hasAuthority(ADMIN.name())
+                .requestMatchers("/animals/walk").hasAuthority(ADMIN.name())
+                .requestMatchers("/animals/walk/return/{walkId}").hasAuthority(ADMIN.name())
+                .requestMatchers("/animals/walk/ongoing").hasAuthority(ADMIN.name())
+                .requestMatchers("/users").hasAuthority(ADMIN.name())
+                .requestMatchers("/users/volunteers").hasAuthority(ADMIN.name())
+                .requestMatchers("/users/{userId}").hasAuthority(ADMIN.name())
+                .requestMatchers("/users/{userId}/comments").hasAuthority(ADMIN.name())
+                .requestMatchers("/users/{userId}/historyAndComments").hasAuthority(ADMIN.name())
+                .requestMatchers("/users/{userId}/history").hasAuthority(ADMIN.name())
+
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/animals").permitAll()
+                .requestMatchers("/animals/{animalId}").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -51,7 +55,11 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/auth/logout")
+                .addLogoutHandler(logoutHandler)
+                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
 
         return httpSecurity.build();
     }

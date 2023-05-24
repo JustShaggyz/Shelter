@@ -1,5 +1,6 @@
 package com.shelter.config.auth;
 
+import com.shelter.data.entities.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -30,4 +31,6 @@ public class RegisterRequest {
 
     @Pattern(regexp = "\"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d).{8,}$\"\n")
     private String password;
+
+    private Role role;
 }

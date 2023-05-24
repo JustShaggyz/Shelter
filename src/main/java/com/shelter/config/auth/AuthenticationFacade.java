@@ -14,7 +14,6 @@ public class AuthenticationFacade {
             return (User) authentication.getPrincipal();
         }
 
-        // Return null or throw an exception if no user is authenticated
         return null;
     }
 }

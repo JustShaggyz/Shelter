@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/history")
-    public ResponseEntity<List<returnWalkDTO>> getHistory(@PathVariable Long userId) {
+    public ResponseEntity<List<returnWalkDTO>> getUserHistoryById(@PathVariable Long userId) {
         List<returnWalkDTO> walkHistory = userService.getUserHistory(userId);
         return ResponseEntity.ok(walkHistory);
     }
@@ -61,12 +61,17 @@ public class UserController {
         // Get the currently authenticated user
         User currentUser = authenticationFacade.getCurrentUser();
 
-        // Perform any necessary checks or validations
-
         // Create a DTO (Data Transfer Object) to represent the user data
         returnCurrentUserDTO userDto = modelMapper.map(currentUser, returnCurrentUserDTO.class);
 
         // Return the user data in the response body
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<returnWalkDTO>> getHistory() {
+        User currentUser = authenticationFacade.getCurrentUser();
+        List<returnWalkDTO> walkHistory = userService.getUserHistory(currentUser.getId());
+        return ResponseEntity.ok(walkHistory);
     }
 }

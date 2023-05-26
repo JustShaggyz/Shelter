@@ -26,9 +26,8 @@ public class AnimalDTO {
     @Size(max = 30)
     private String breed;
 
-    @Min(value = 0)
     @Max(value = 100)
-    private int age;
+    private Integer age;
 
     @Size(max = 300)
     private String description;

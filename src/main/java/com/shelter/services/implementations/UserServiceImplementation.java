@@ -3,17 +3,20 @@ package com.shelter.services.implementations;
 import com.shelter.data.entities.Comment;
 import com.shelter.data.entities.Role;
 import com.shelter.data.entities.User;
+import com.shelter.data.entities.Walk;
 import com.shelter.data.repositories.AnimalRepository;
 import com.shelter.data.repositories.UserRepository;
 import com.shelter.data.repositories.WalkRepository;
 import com.shelter.dto.*;
 import com.shelter.exceptions.UserNotFoundException;
+import com.shelter.exceptions.WalkNotFoundException;
 import com.shelter.services.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -67,9 +70,19 @@ public class UserServiceImplementation implements UserService {
         int startIndex = Math.max(totalComments - 5, 0); // Starting index to retrieve comments
 
         List<Comment> lastFiveComments = comments.subList(startIndex, totalComments);
-        return lastFiveComments.stream()
-                .map(comment -> modelMapper.map(comment, returnCommentDTO.class))
-                .collect(Collectors.toList());
+
+        List<returnCommentDTO> returnComments = new ArrayList<>();
+        for (Comment comment : lastFiveComments) {
+            Long walkId = comment.getWalkId();
+            Walk walk = walkRepository.findById(walkId)
+                    .orElseThrow(() -> new WalkNotFoundException("Walk not found"));
+
+            returnCommentDTO returnComment = modelMapper.map(comment, returnCommentDTO.class);
+            returnComment.setWalk(modelMapper.map(walk, returnWalkCommentDTO.class));
+            returnComments.add(returnComment);
+        }
+
+        return returnComments;
     }
 
     @Override

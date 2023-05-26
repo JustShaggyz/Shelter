@@ -9,15 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class returnAnimalDTO {
+public class returnAnimalForCommentDTO {
     private Long id;
 
     private String name;
 
-    private returnAnimalType type;
-
     private String pictureUrl;
-
-    private boolean isAvailable;
-
 }

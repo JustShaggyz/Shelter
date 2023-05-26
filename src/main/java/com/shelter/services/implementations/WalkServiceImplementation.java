@@ -50,13 +50,12 @@ public class WalkServiceImplementation implements WalkService {
 
         Walk walk = new Walk(user, animal, LocalDate.now(), false);
         walkRepository.save(walk);
-        returnWalkDTO returnWalk = new returnWalkDTO(
+        return new returnWalkDTO(
                 walk.getId(),
                 modelMapper.map(walk.getUser(), returnUserDTO.class),
                 modelMapper.map(walk.getAnimal(), returnDetailedAnimalDTO.class),
                 walk.getDate(),
                 walk.isFinished());
-        return returnWalk;
 
 
     }
@@ -72,12 +71,10 @@ public class WalkServiceImplementation implements WalkService {
         animal.setAvailable(true);
         animalRepository.save(animal);
 
-        if(comment!=null) {
+        if(comment != null) {
             User user = walk.getUser();
             List<Comment> comments = user.getComments();
             User currentUser = authenticationFacade.getCurrentUser();
-            //comments.add(new Comment(user.getId(), currentUser.getId(), animal.getId(), comment));
-            //comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
             comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
             user.setComments(comments);
             userRepository.save(user);

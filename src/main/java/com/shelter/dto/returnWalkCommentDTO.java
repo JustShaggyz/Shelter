@@ -5,19 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class returnAnimalDTO {
+public class returnWalkCommentDTO {
     private Long id;
 
-    private String name;
+    private returnAnimalForCommentDTO animal;
 
-    private returnAnimalType type;
-
-    private String pictureUrl;
-
-    private boolean isAvailable;
-
+    private LocalDate date;
 }

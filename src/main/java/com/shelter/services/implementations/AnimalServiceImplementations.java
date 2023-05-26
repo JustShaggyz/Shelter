@@ -44,6 +44,9 @@ public class AnimalServiceImplementations implements AnimalService {
             String pictureUrl = uploadPicture(animalDTO.getPicture());
             animal.setPictureUrl(pictureUrl);
         }
+        else {
+            animal.setPictureUrl("https://i.ibb.co/gMVTFHs/default-20230526171923.jpg");
+        }
         return modelMapper.map(animalRepository.save(animal), returnDetailedAnimalDTO.class);
     }
 

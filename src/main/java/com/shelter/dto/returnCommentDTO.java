@@ -1,6 +1,7 @@
 package com.shelter.dto;
 
 import com.shelter.data.entities.User;
+import com.shelter.data.entities.Walk;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import lombok.Setter;
 public class returnCommentDTO {
     private Long id;
 
-    private Long walkId;
+    private returnWalkCommentDTO walk;
 
     private Long adminId;
 

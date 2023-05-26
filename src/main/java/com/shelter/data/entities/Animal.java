@@ -1,8 +1,6 @@
 package com.shelter.data.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +14,9 @@ public class Animal extends BaseEntity{
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "type", nullable = false)
-    private String type;
+    @ManyToOne
+    @JoinColumn(name = "type_id", nullable = true)
+    private AnimalType type;
 
     @Column(name = "breed", nullable = false)
     private String breed;

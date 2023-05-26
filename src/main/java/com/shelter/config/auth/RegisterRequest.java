@@ -23,7 +23,7 @@ public class RegisterRequest {
     @Size(max = 30)
     private String lastName;
 
-    @Pattern(regexp = "\"^08\\\\d{8}$\"\n", message = "Phone number must be 10 digits and start with 08")
+    @Pattern(regexp = "/^(\\+359|0)(87|88|89)(\\d{7})$/", message = "Phone number must be 10 digits and start with 08")
     private String phoneNumber;
 
     @Pattern(regexp = "\"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}$\"\n")

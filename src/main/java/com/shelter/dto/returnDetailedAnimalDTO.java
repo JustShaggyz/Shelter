@@ -14,7 +14,7 @@ public class returnDetailedAnimalDTO {
 
     private String name;
 
-    private String type;
+    private returnAnimalType type;
 
     private String breed;
 

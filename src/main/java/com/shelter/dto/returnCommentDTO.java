@@ -1,5 +1,7 @@
 package com.shelter.dto;
 
+import com.shelter.data.entities.User;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,15 +11,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class returnAnimalDTO {
+public class returnCommentDTO {
     private Long id;
 
-    private String name;
+    private Long walkId;
 
-    private returnAnimalType type;
+    private Long adminId;
 
-    private String pictureUrl;
-
-    private boolean isAvailable;
-
+    private String message;
 }

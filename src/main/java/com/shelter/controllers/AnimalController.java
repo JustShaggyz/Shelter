@@ -5,6 +5,7 @@ import com.shelter.services.AnimalService;
 import com.shelter.services.WalkService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,12 @@ public class AnimalController {
         return ResponseEntity.ok(animals);
     }
 
+    @GetMapping("/animal-types")
+    public ResponseEntity<List<returnAnimalType>> getAnimalTypes() {
+        List<returnAnimalType> types = animalService.getAnimalTypes();
+        return ResponseEntity.ok(types);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<returnDetailedAnimalDTO> addAnimal(@Valid @ModelAttribute AnimalDTO animalDTO) {
         returnDetailedAnimalDTO savedAnimal = animalService.addAnimal(animalDTO);
@@ -73,5 +80,13 @@ public class AnimalController {
         return ResponseEntity.ok(walks);
     }
 
-
+    @PostMapping("/add-animal-type")
+    public ResponseEntity<String> createAnimalType(@RequestBody String type) {
+        boolean created = animalService.createAnimalType(type);
+        if (created) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Animal type created successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Animal type already exists");
+        }
+    }
 }

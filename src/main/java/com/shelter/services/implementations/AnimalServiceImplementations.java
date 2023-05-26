@@ -1,13 +1,15 @@
 package com.shelter.services.implementations;
 
+import com.google.gson.Gson;
 import com.shelter.data.entities.Animal;
+import com.shelter.data.entities.AnimalType;
 import com.shelter.data.repositories.AnimalRepository;
-import com.shelter.dto.AnimalDTO;
-import com.shelter.dto.returnAnimalDTO;
-import com.shelter.dto.returnDetailedAnimalDTO;
+import com.shelter.data.repositories.AnimalTypeRepository;
+import com.shelter.dto.*;
 import com.shelter.exceptions.AnimalNotFoundException;
 import com.shelter.services.AnimalService;
 import lombok.AllArgsConstructor;
+import okhttp3.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,19 +26,66 @@ public class AnimalServiceImplementations implements AnimalService {
 
     private final AnimalRepository animalRepository;
     private final ModelMapper modelMapper;
+    private final AnimalTypeRepository animalTypeRepository;
+    private static final String IMGBB_API_KEY = "b30a30d4a14ea4da2de7c718b7f346c0";
 
 
     public returnDetailedAnimalDTO addAnimal(AnimalDTO animalDTO) {
         Animal animal = modelMapper.map(animalDTO, Animal.class);
+        createAnimalType(animalDTO.getType());
 
-        // Process and save the picture
+        AnimalType animalType = animalTypeRepository.findByType(animalDTO.getType());
+
+        animal.setType(animalType);
+
         if (animalDTO.getPicture() != null && !animalDTO.getPicture().isEmpty()) {
-            String pictureUrl = savePicture(animalDTO.getPicture());
+            String pictureUrl = uploadPicture(animalDTO.getPicture());
             animal.setPictureUrl(pictureUrl);
         }
         return modelMapper.map(animalRepository.save(animal), returnDetailedAnimalDTO.class);
-
     }
+
+    private String uploadPicture(MultipartFile picture) {
+        try {
+            String fileName = picture.getOriginalFilename();
+
+            OkHttpClient client = new OkHttpClient();
+
+            RequestBody requestBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("image", fileName,
+                            RequestBody.create(MediaType.parse("image/*"), picture.getBytes()))
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url("https://api.imgbb.com/1/upload?key=" + IMGBB_API_KEY)
+                    .post(requestBody)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new RuntimeException("Failed to upload picture to ImgBB. Response code: " + response.code());
+            }
+
+            String responseBody = response.body().string();
+            String imageUrl = parseImageUrl(responseBody);
+
+            response.close();
+
+            return imageUrl;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to upload picture to ImgBB.");
+        }
+    }
+
+    private String parseImageUrl(String responseBody) {
+
+        Gson gson = new Gson();
+        ImgBBResponse imgBBResponse = gson.fromJson(responseBody, ImgBBResponse.class);
+        return imgBBResponse.getData().getUrl();
+    }
+
 
     private String savePicture(MultipartFile picture) {
         try {
@@ -83,6 +132,25 @@ public class AnimalServiceImplementations implements AnimalService {
                 .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
         animal.setAvailable(false);
         animalRepository.save(animal);
+    }
+
+    @Override
+    public List<returnAnimalType> getAnimalTypes() {
+        return animalTypeRepository.findAll()
+                .stream()
+                .map(animalType -> modelMapper.map(animalType, returnAnimalType.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean createAnimalType(String type) {
+        AnimalType animalType = animalTypeRepository.findByType(type);
+        if (animalType == null) {
+            animalType = new AnimalType(type);
+            animalTypeRepository.save(animalType);
+            return true;
+        }
+        return false;
     }
 
     public returnDetailedAnimalDTO adopt(Long animalId) {

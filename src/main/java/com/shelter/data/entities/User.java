@@ -34,10 +34,8 @@ public class User extends BaseEntity implements UserDetails {
     private String lastName;
 
 
-    @ElementCollection
-    @CollectionTable(name = "comments")
-    @Column(name = "comments")
-    private List<String> comments;
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
     @Enumerated(EnumType.STRING)
     private Role role;

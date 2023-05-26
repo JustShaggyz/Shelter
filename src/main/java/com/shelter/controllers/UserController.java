@@ -51,8 +51,8 @@ public class UserController {
     }*/
 
     @GetMapping("/{userId}/comments")
-    public ResponseEntity<List<String>> getComments(@PathVariable Long userId) {
-        List<String> comments = userService.getUserComments(userId);
+    public ResponseEntity<List<returnCommentDTO>> getComments(@PathVariable Long userId) {
+        List<returnCommentDTO> comments = userService.getUserComments(userId);
         return ResponseEntity.ok(comments);
     }
 

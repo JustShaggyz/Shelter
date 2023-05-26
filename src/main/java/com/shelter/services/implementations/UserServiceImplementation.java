@@ -1,14 +1,12 @@
 package com.shelter.services.implementations;
 
+import com.shelter.data.entities.Comment;
 import com.shelter.data.entities.Role;
 import com.shelter.data.entities.User;
 import com.shelter.data.repositories.AnimalRepository;
 import com.shelter.data.repositories.UserRepository;
 import com.shelter.data.repositories.WalkRepository;
-import com.shelter.dto.HistoryAndCommentsDTO;
-import com.shelter.dto.returnUserDTO;
-import com.shelter.dto.returnDetailedUserDTO;
-import com.shelter.dto.returnWalkDTO;
+import com.shelter.dto.*;
 import com.shelter.exceptions.UserNotFoundException;
 import com.shelter.services.UserService;
 import lombok.AllArgsConstructor;
@@ -60,16 +58,18 @@ public class UserServiceImplementation implements UserService {
         return getHistoryByUserIdAndDate(userId);
     }
 
-    public List<String> getUserComments(Long userId) {
+    public List<returnCommentDTO> getUserComments(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        List<String> comments = user.getComments();
+        List<Comment> comments = user.getComments();
 
         int totalComments = comments.size();
         int startIndex = Math.max(totalComments - 5, 0); // Starting index to retrieve comments
 
-        List<String> lastFiveComments = comments.subList(startIndex, totalComments);
-        return lastFiveComments;
+        List<Comment> lastFiveComments = comments.subList(startIndex, totalComments);
+        return lastFiveComments.stream()
+                .map(comment -> modelMapper.map(comment, returnCommentDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -79,9 +79,9 @@ public class UserServiceImplementation implements UserService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        List<String> comments = user.getComments();
+        List<Comment> comments = user.getComments();
 
-        HistoryAndCommentsDTO dto = new HistoryAndCommentsDTO(walks, comments);
+        HistoryAndCommentsDTO dto = new HistoryAndCommentsDTO(walks, null);
 
         return dto;
     }

@@ -1,6 +1,8 @@
 package com.shelter.services.implementations;
 
+import com.shelter.config.auth.AuthenticationFacade;
 import com.shelter.data.entities.Animal;
+import com.shelter.data.entities.Comment;
 import com.shelter.data.entities.User;
 import com.shelter.data.entities.Walk;
 import com.shelter.data.repositories.AnimalRepository;
@@ -33,6 +35,7 @@ public class WalkServiceImplementation implements WalkService {
     private final UserService userService;
     private final AnimalService animalService;
     private final ModelMapper modelMapper;
+    private final AuthenticationFacade authenticationFacade;
 
     @Override
     public returnWalkDTO takeAnimalForWalk(WalkDTO walkDTO) {
@@ -70,8 +73,11 @@ public class WalkServiceImplementation implements WalkService {
         animalRepository.save(animal);
 
         User user = walk.getUser();
-        List<String> comments = user.getComments();
-        comments.add(comment);
+        List<Comment> comments = user.getComments();
+        User currentUser = authenticationFacade.getCurrentUser();
+        //comments.add(new Comment(user.getId(), currentUser.getId(), animal.getId(), comment));
+        //comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
+        comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
         user.setComments(comments);
         userRepository.save(user);
 

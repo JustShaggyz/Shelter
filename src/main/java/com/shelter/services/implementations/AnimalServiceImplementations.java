@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -47,7 +49,10 @@ public class AnimalServiceImplementations implements AnimalService {
 
     private String uploadPicture(MultipartFile picture) {
         try {
-            String fileName = picture.getOriginalFilename();
+            String originalFileName = picture.getOriginalFilename();
+            String fileExtension = getFileExtension(originalFileName);
+
+            String fileName = generateUniqueFileName(originalFileName);
 
             OkHttpClient client = new OkHttpClient();
 
@@ -77,6 +82,21 @@ public class AnimalServiceImplementations implements AnimalService {
             e.printStackTrace();
             throw new RuntimeException("Failed to upload picture to ImgBB.");
         }
+    }
+
+    private String generateUniqueFileName(String originalFileName) {
+        int dotIndex = originalFileName.lastIndexOf('.');
+        String fileNameWithoutExtension = (dotIndex >= 0) ? originalFileName.substring(0, dotIndex) : originalFileName;
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        return fileNameWithoutExtension + "_" + timeStamp;
+    }
+
+    private String getFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex >= 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex + 1).toLowerCase();
+        }
+        return "";
     }
 
     private String parseImageUrl(String responseBody) {

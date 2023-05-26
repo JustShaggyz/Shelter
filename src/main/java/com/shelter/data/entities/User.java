@@ -18,7 +18,7 @@ import java.util.*;
 public class User extends BaseEntity implements UserDetails {
 
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")

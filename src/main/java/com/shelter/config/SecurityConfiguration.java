@@ -43,8 +43,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/users/**").hasAuthority(ADMIN.name())
 
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/animals").permitAll()
-                .requestMatchers("/animals/{animalId}").permitAll()
+                .requestMatchers("/all-animals/**").permitAll()
+
                 .anyRequest()
                 .authenticated()
                 .and()

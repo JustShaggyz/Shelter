@@ -93,4 +93,11 @@ public class WalkServiceImplementation implements WalkService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public returnWalkDTO getWalkById(Long walkId) {
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(() -> new WalkNotFoundException("Walk not found"));
+        return modelMapper.map(walk, returnWalkDTO.class);
+    }
+
 }

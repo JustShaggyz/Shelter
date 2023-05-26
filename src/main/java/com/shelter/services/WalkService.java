@@ -13,4 +13,6 @@ public interface WalkService {
     returnWalkDTO returnFromWalk(Long walkId, String comment);
 
     List<returnWalkDTO> getOngoingWalks();
+
+    returnWalkDTO getWalkById(Long walkId);
 }

@@ -80,6 +80,13 @@ public class AnimalController {
         return ResponseEntity.ok(walks);
     }
 
+    @GetMapping("/animals/walk/{walkId}")
+    public ResponseEntity<returnWalkDTO> returnWalkById(@PathVariable Long walkId) {
+        returnWalkDTO walks = walkService.getWalkById(walkId);
+        return ResponseEntity.ok(walks);
+    }
+
+
     @PostMapping("/animals/add-animal-type")
     public ResponseEntity<String> createAnimalType(@RequestBody String type) {
         boolean created = animalService.createAnimalType(type);

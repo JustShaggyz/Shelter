@@ -38,7 +38,7 @@ public class AnimalController {
         return ResponseEntity.ok(availableAnimals);
     }
 
-    @GetMapping("/animals/onWalk")
+    @GetMapping("/animals/on-walk")
     public ResponseEntity<List<returnAnimalDTO>> getAnimalsOutForWalk() {
         List<returnAnimalDTO> animals = animalService.getAnimalsOutForWalk();
         return ResponseEntity.ok(animals);

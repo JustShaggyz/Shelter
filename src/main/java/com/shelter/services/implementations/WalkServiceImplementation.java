@@ -72,14 +72,17 @@ public class WalkServiceImplementation implements WalkService {
         animal.setAvailable(true);
         animalRepository.save(animal);
 
-        User user = walk.getUser();
-        List<Comment> comments = user.getComments();
-        User currentUser = authenticationFacade.getCurrentUser();
-        //comments.add(new Comment(user.getId(), currentUser.getId(), animal.getId(), comment));
-        //comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
-        comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
-        user.setComments(comments);
-        userRepository.save(user);
+        if(comment!=null) {
+            User user = walk.getUser();
+            List<Comment> comments = user.getComments();
+            User currentUser = authenticationFacade.getCurrentUser();
+            //comments.add(new Comment(user.getId(), currentUser.getId(), animal.getId(), comment));
+            //comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
+            comments.add(new Comment(currentUser.getId(), user.getId(), walkId, comment));
+            user.setComments(comments);
+            userRepository.save(user);
+        }
+
 
         return modelMapper.map(walk, returnWalkDTO.class);
     }

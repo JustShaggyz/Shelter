@@ -69,7 +69,7 @@ public class AnimalController {
     }
 
     @PutMapping("/animals/walk/return/{walkId}")
-    public ResponseEntity<returnWalkDTO> returnFromWalk(@PathVariable Long walkId, @RequestBody String comment) {
+    public ResponseEntity<returnWalkDTO> returnFromWalk(@PathVariable Long walkId, @RequestBody(required = false) String comment) {
         returnWalkDTO walk = walkService.returnFromWalk(walkId, comment);
         return ResponseEntity.ok(walk);
     }

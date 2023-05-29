@@ -17,9 +17,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          AuthenticationException authException) throws IOException {
         if (authException.getMessage().contains("ExpiredJwtException")) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
-        } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-        }
+        } 
     }
 }
 

@@ -16,6 +16,8 @@ public class returnAnimalDTO {
 
     private returnAnimalType type;
 
+    private String breed;
+
     private String pictureUrl;
 
     private boolean isAvailable;

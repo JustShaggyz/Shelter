@@ -152,7 +152,7 @@ public class AnimalServiceImplementations implements AnimalService {
     @Override
     public void returnAnimalFromWalk(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
         animal.setAvailable(false);
         animalRepository.save(animal);
     }
@@ -178,7 +178,7 @@ public class AnimalServiceImplementations implements AnimalService {
 
     public returnDetailedAnimalDTO adopt(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
 
         animal.setAdopted(true);
         animal.setAvailable(false);
@@ -196,7 +196,7 @@ public class AnimalServiceImplementations implements AnimalService {
     @Override
     public returnDetailedAnimalDTO getAnimalById(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
-                .orElseThrow(() -> new AnimalNotFoundException("Animal not found with ID: " + animalId));
+                .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
 
         return modelMapper.map(animal, returnDetailedAnimalDTO.class);
     }

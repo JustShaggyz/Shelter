@@ -23,7 +23,7 @@ public class returnDetailedUserDTO {
 
     private String phoneNumber;
 
-    private List<String> comments;
+    //private List<String> comments;
 
     private Role role;
 

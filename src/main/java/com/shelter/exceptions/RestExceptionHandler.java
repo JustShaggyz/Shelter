@@ -18,22 +18,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AnimalNotFoundException.class)
-    protected ResponseEntity<Object> handleAnimalNotFoundException(AnimalNotFoundException ex, HttpServletRequest request) {
+    protected ResponseEntity<String> handleAnimalNotFoundException(AnimalNotFoundException ex, HttpServletRequest request) {
 
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4041);
-        return buildResponseEntity(apiError);
+        /*ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4041);
+        return buildResponseEntity(apiError);*/
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4042);
-        return buildResponseEntity(apiError);
+        /*ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4042);
+        return buildResponseEntity(apiError);*/
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(WalkNotFoundException.class)
     protected ResponseEntity<Object> handleWalkNotFoundException(WalkNotFoundException ex, HttpServletRequest request) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4043);
-        return buildResponseEntity(apiError);
+        /*ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, 4043);
+        return buildResponseEntity(apiError);*/
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
 

@@ -15,6 +15,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "animal_type")
 public class AnimalType extends BaseEntity{
-
+    @Column
     private String type;
 }

@@ -97,20 +97,6 @@ class UserControllerTest {
         verify(userService, times(1)).getUserHistory(userId);
     }
 
-   /* @Test
-    void testGetComments() {
-        Long userId = 1L;
-        List<String> comments = new ArrayList<>();
-        comments.add("1");
-        comments.add("2");
-        when(userService.getUserComments(userId)).thenReturn(comments);
-
-        ResponseEntity<List<String>> response = userController.getComments(userId);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(comments, response.getBody());
-        verify(userService, times(1)).getUserComments(userId);
-    }*/
 
     @Test
     void testGetCurrentUser() {

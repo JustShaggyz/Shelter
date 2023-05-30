@@ -9,11 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -67,6 +69,22 @@ class UserServiceImplementationTest {
 
     @Test
     void testGetVolunteers() {
+        when(userRepository.findUsersByRole(Role.USER)).thenReturn(userList);
 
+        List<returnUserDTO> result = userService.getVolunteers();
+
+        assertEquals(userList.size(), result.size());
+    }
+
+    @Test
+    void getUserById() {
+    }
+
+    @Test
+    void getUserHistory() {
+    }
+
+    @Test
+    void getUserComments() {
     }
 }

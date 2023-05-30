@@ -23,6 +23,7 @@ public class Walk extends BaseEntity{
     @OneToOne
     private Animal animal;
 
+    @Column
     private LocalDate date;
 
     @Column

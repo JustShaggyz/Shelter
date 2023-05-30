@@ -30,7 +30,7 @@ public class UserServiceImplementation implements UserService {
     private final WalkRepository walkRepository;
     private final ModelMapper modelMapper;
 
-
+    //Get all users and map to dto
     @Override
     public List<returnUserDTO> getAllUsers() {
         return userRepository.findAll()
@@ -39,6 +39,7 @@ public class UserServiceImplementation implements UserService {
                 .collect(Collectors.toList());
     }
 
+    //Get all volunteers and map to dto
     @Override
     public List<returnUserDTO> getVolunteers() {
         return userRepository.findUsersByRole(Role.USER)
@@ -48,6 +49,7 @@ public class UserServiceImplementation implements UserService {
     }
 
 
+    //Get user by id and map to dto
     @Override
     public returnDetailedUserDTO getUserById(Long userId) {
         User user = userRepository.findById(userId)
@@ -56,22 +58,25 @@ public class UserServiceImplementation implements UserService {
     }
 
 
+    //Get user history
     public List<returnWalkDTO> getUserHistory(Long userId) {
-
         return getHistoryByUserIdAndDate(userId);
     }
 
+    //Get user comments
     public List<returnCommentDTO> getUserComments(Long userId) {
+        //Get comments by user id
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         List<Comment> comments = user.getComments();
 
+        //Take last 5 comments
         int totalComments = comments.size();
-        int startIndex = Math.max(totalComments - 5, 0); // Starting index to retrieve comments
-
+        int startIndex = Math.max(totalComments - 5, 0);
         List<Comment> lastFiveComments = comments.subList(startIndex, totalComments);
-
         List<returnCommentDTO> returnComments = new ArrayList<>();
+
+        //Set additional information in comment about walk and employee related to comment
         for (Comment comment : lastFiveComments) {
             Long walkId = comment.getWalkId();
             Walk walk = walkRepository.findById(walkId)
@@ -99,9 +104,12 @@ public class UserServiceImplementation implements UserService {
         return dto;
     }
 
+    //Get user history for the last 3 months
     private List<returnWalkDTO> getHistoryByUserIdAndDate(Long userId) {
+        //Get date 3 months ago
         LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);
 
+        //Get history of walks by user id for the last 3 months
         return walkRepository.findByUserIdAndDateAfter(userId, threeMonthsAgo)
                 .orElseThrow(() -> new NoSuchElementException("History not found"))
                 .stream()

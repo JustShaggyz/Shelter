@@ -37,17 +37,22 @@ public class WalkServiceImplementation implements WalkService {
     private final ModelMapper modelMapper;
     private final AuthenticationFacade authenticationFacade;
 
+    //Take out for a walk
     @Override
     public returnWalkDTO takeAnimalForWalk(WalkDTO walkDTO) {
+        //Get user by id
         User user = userRepository.findById(walkDTO.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
+        //Get animal by id
         Animal animal = animalRepository.findById(walkDTO.getAnimalId())
                 .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
 
+        //Set as non available
         animal.setAvailable(false);
         animalRepository.save(animal);
 
+        //Create walk object with data for user, animal, date and status for completion
         Walk walk = new Walk(user, animal, LocalDate.now(), false);
         walkRepository.save(walk);
         return new returnWalkDTO(
@@ -60,17 +65,22 @@ public class WalkServiceImplementation implements WalkService {
 
     }
 
+    //Return from a walk
     @Override
     public returnWalkDTO returnFromWalk(Long walkId, String comment) {
+        //Get walk by id
         Walk walk = walkRepository.findByIdAndIsFinishedFalse(walkId)
                 .orElseThrow(() -> new WalkNotFoundException("Walk not found"));
+        //Set status finished
         walk.setFinished(true);
         walkRepository.save(walk);
 
+        //Set animal as available
         Animal animal = walk.getAnimal();
         animal.setAvailable(true);
         animalRepository.save(animal);
 
+        //Add comment if existent
         if(comment != null) {
             User user = walk.getUser();
             List<Comment> comments = user.getComments();
@@ -86,6 +96,7 @@ public class WalkServiceImplementation implements WalkService {
 
     @Override
     public List<returnWalkDTO> getOngoingWalks() {
+        //Get ongoing walks by status and map to dto
         return walkRepository.findByIsFinishedFalse()
                 .orElseThrow(() -> new WalkNotFoundException("No ongoing walks!"))
                 .stream()
@@ -95,6 +106,7 @@ public class WalkServiceImplementation implements WalkService {
 
     @Override
     public returnWalkDTO getWalkById(Long walkId) {
+        //Get walk by id and map to dto
         Walk walk = walkRepository.findById(walkId)
                 .orElseThrow(() -> new WalkNotFoundException("Walk not found"));
         return modelMapper.map(walk, returnWalkDTO.class);

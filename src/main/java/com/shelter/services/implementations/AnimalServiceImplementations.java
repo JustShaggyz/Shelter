@@ -40,6 +40,7 @@ public class AnimalServiceImplementations implements AnimalService {
 
         animal.setType(animalType);
 
+        //If picture is provided, upload it to imgbb. Else set default picture
         if (animalDTO.getPicture() != null && !animalDTO.getPicture().isEmpty()) {
             String pictureUrl = uploadPicture(animalDTO.getPicture());
             animal.setPictureUrl(pictureUrl);
@@ -55,6 +56,7 @@ public class AnimalServiceImplementations implements AnimalService {
             String originalFileName = picture.getOriginalFilename();
             String fileExtension = getFileExtension(originalFileName);
 
+            //Add timestamp to name
             String fileName = generateUniqueFileName(originalFileName);
 
             OkHttpClient client = new OkHttpClient();
@@ -87,6 +89,7 @@ public class AnimalServiceImplementations implements AnimalService {
         }
     }
 
+    //Appends timestamp to picture name
     private String generateUniqueFileName(String originalFileName) {
         int dotIndex = originalFileName.lastIndexOf('.');
         String fileNameWithoutExtension = (dotIndex >= 0) ? originalFileName.substring(0, dotIndex) : originalFileName;
@@ -134,14 +137,15 @@ public class AnimalServiceImplementations implements AnimalService {
         }
     }
 
+    //Get all non-adopted animals
     public List<returnAnimalDTO> getAllAnimals() {
-
         return animalRepository.findByIsAdoptedFalse()
                 .stream()
                 .map(animal -> modelMapper.map(animal, returnAnimalDTO.class))
                 .collect(Collectors.toList());
     }
 
+    //Get available animals
     public List<returnAnimalDTO> getAvailableAnimals() {
         return animalRepository.findByIsAvailableTrue()
                 .stream()
@@ -157,6 +161,7 @@ public class AnimalServiceImplementations implements AnimalService {
         animalRepository.save(animal);
     }
 
+    //Get animal types
     @Override
     public List<returnAnimalType> getAnimalTypes() {
         return animalTypeRepository.findAll()
@@ -165,6 +170,7 @@ public class AnimalServiceImplementations implements AnimalService {
                 .collect(Collectors.toList());
     }
 
+    //Create new animal type
     @Override
     public boolean createAnimalType(String type) {
         AnimalType animalType = animalTypeRepository.findByType(type);
@@ -176,15 +182,18 @@ public class AnimalServiceImplementations implements AnimalService {
         return false;
     }
 
+    //Adopt animal
     public returnDetailedAnimalDTO adopt(Long animalId) {
         Animal animal = animalRepository.findById(animalId)
                 .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
 
+        //Set adopted true and availability to false
         animal.setAdopted(true);
         animal.setAvailable(false);
         return modelMapper.map(animalRepository.save(animal), returnDetailedAnimalDTO.class);
     }
 
+    //Get unavailable animals
     @Override
     public List<returnAnimalDTO> getAnimalsOutForWalk() {
         return animalRepository.findByIsAvailableFalseAndIsAdoptedFalse()
@@ -193,6 +202,7 @@ public class AnimalServiceImplementations implements AnimalService {
                 .collect(Collectors.toList());
     }
 
+    //Get animal by id
     @Override
     public returnDetailedAnimalDTO getAnimalById(Long animalId) {
         Animal animal = animalRepository.findById(animalId)

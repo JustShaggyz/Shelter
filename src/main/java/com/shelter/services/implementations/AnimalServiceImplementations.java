@@ -205,7 +205,7 @@ public class AnimalServiceImplementations implements AnimalService {
     //Get animal by id
     @Override
     public returnDetailedAnimalDTO getAnimalById(Long animalId) {
-        Animal animal = animalRepository.findById(animalId)
+        Animal animal = animalRepository.findByIdAndIsAdoptedFalse(animalId)
                 .orElseThrow(() -> new AnimalNotFoundException("Animal not found"));
 
         return modelMapper.map(animal, returnDetailedAnimalDTO.class);
